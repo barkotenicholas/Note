@@ -18,12 +18,14 @@
         app:layout_constraintStart_toStartOf="parent"
         android:hint="Courses"
         app:layout_constraintTop_toTopOf="parent" >
-        <AutoCompleteTextView
+
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/spin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spin"
+            android:clickable="true"
             android:inputType="none"
-            />
+            tools:ignore="KeyboardInaccessibleWidget" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
