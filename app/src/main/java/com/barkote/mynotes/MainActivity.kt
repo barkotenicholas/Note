@@ -2,6 +2,8 @@ package com.barkote.mynotes
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
@@ -32,22 +34,38 @@ class MainActivity : AppCompatActivity() {
         if(notePosition != POSITION_NOT_SET){
 
             Log.d("TAG", "onCreate:  $notePosition ")
-            displayNote(notePosition)
+            displayNote()
         }
 
 
     }
 
-    private fun displayNote(notePosition: Int) {
-        val note = DataManager.notes.get(notePosition)
+    private fun displayNote() {
+        val note = DataManager.notes[notePosition]
 
         binding.title.setText(note.title)
         binding.content.setText(note.text)
 
-        val list = DataManager.courses.values.toList()
-
-        val i = list.indexOf(note.course)
-
         binding.spin.setText(note.course.toString())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.action_next -> {
+                moveNext()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun moveNext() {
+        ++notePosition
+        displayNote()
     }
 }

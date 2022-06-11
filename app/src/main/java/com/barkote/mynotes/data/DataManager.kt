@@ -27,7 +27,7 @@ object DataManager {
 
     private fun initializeNotes() {
 
-        var note = NoteInfo(courses.get("android_intent"),"Introduction to intents","AN intent is used to start new activities")
+        var note = NoteInfo(courses.get("android_intent"),"Introduction to intents","An intent is used to start new activities")
         notes.add(note)
 
         note = NoteInfo(courses.get("android_async"),"Introduction to Async","Async is used for background services")
