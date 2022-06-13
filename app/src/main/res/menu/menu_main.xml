@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_next"
         android:icon="@drawable/ic_next"
-        android:title="Item"
-        app:showAsAction="ifRoom" />
+        android:title="next"
+        app:showAsAction="ifRoom|withText" />
 </menu>
