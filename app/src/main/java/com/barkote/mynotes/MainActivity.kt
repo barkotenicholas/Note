@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
 import com.barkote.mynotes.const.POSITION_NOT_SET
 import com.barkote.mynotes.data.CourseInfo
 import com.barkote.mynotes.data.DataManager
+import com.barkote.mynotes.data.NoteInfo
 import com.barkote.mynotes.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -34,17 +36,15 @@ class MainActivity : AppCompatActivity() {
         notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
 
         if(notePosition != POSITION_NOT_SET){
-
             Log.d("TAG", "onCreate:  $notePosition ")
             displayNote()
         }
-
-
-        binding.spin.setOnItemClickListener { adapterView, view, i, l ->
-            val note = DataManager.notes[notePosition]
-            val course = adapterView.getItemAtPosition(i)
-            note.course = course as CourseInfo
+        else{
+            DataManager.notes.add(NoteInfo())
+            notePosition = DataManager.notes.lastIndex
         }
+
+
 
 
     }
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.title.setText(note.title)
         binding.content.setText(note.text)
-
+        binding.save.visibility = View.GONE
         val item =  DataManager.courses.values.toList().indexOf(note.course)
 
         binding.spin.setText(note.course.toString())
