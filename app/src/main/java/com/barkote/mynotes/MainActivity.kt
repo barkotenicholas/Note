@@ -7,7 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
+import com.barkote.mynotes.const.NOTE_POSITION
 import com.barkote.mynotes.const.POSITION_NOT_SET
 import com.barkote.mynotes.data.CourseInfo
 import com.barkote.mynotes.data.DataManager
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinner.adapter = adapterCourses
 
-        notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
+        notePosition = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET)
 
         if(notePosition != POSITION_NOT_SET){
             displayNote()
@@ -49,6 +49,11 @@ class MainActivity : AppCompatActivity() {
             finish()
 
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(NOTE_POSITION , notePosition)
     }
 
     private fun displayNote() {

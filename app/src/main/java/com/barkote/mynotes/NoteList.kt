@@ -3,11 +3,9 @@ package com.barkote.mynotes
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ArrayAdapter
-import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
+import com.barkote.mynotes.const.NOTE_POSITION
 import com.barkote.mynotes.data.DataManager
-import com.barkote.mynotes.data.NoteInfo
 import com.barkote.mynotes.databinding.ActivityNoteListBinding
 
 class NoteList : AppCompatActivity() {
@@ -29,7 +27,7 @@ class NoteList : AppCompatActivity() {
 
         binding.notelist.setOnItemClickListener { _, _, i, _ ->
             val intent   = Intent(this,MainActivity::class.java)
-            intent.putExtra(EXTRA_NOTE_POSITION,i)
+            intent.putExtra(NOTE_POSITION,i)
 
             startActivity(intent)
         }
