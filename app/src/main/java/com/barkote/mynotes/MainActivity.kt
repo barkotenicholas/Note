@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
 import com.barkote.mynotes.const.POSITION_NOT_SET
+import com.barkote.mynotes.data.CourseInfo
 import com.barkote.mynotes.data.DataManager
 import com.barkote.mynotes.data.NoteInfo
 import com.barkote.mynotes.databinding.ActivityMainBinding
@@ -26,16 +27,12 @@ class MainActivity : AppCompatActivity() {
 
         val adapterCourses =  ArrayAdapter(this,R.layout.drop_down_item,DataManager.courses.values.toList())
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinner.setAdapter(adapterCourses)
+        binding.spinner.adapter = adapterCourses
 
         notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
 
         if(notePosition != POSITION_NOT_SET){
             displayNote()
-        }
-        else{
-            DataManager.notes.add(NoteInfo())
-            notePosition = DataManager.notes.lastIndex
         }
 
         binding.save.setOnClickListener {
@@ -46,7 +43,10 @@ class MainActivity : AppCompatActivity() {
 
             note.title = binding.title.text.toString()
             note.text  = binding.content.text.toString()
+            note.course= binding.spinner.selectedItem as CourseInfo
 
+
+            finish()
 
         }
     }
@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
         note.title = binding.title.text.toString()
         note.text  = binding.content.text.toString()
-
+        note.course= binding.spinner.selectedItem as CourseInfo
 
 
     }

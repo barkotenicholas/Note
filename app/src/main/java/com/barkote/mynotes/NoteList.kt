@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
 import com.barkote.mynotes.data.DataManager
+import com.barkote.mynotes.data.NoteInfo
 import com.barkote.mynotes.databinding.ActivityNoteListBinding
 
 class NoteList : AppCompatActivity() {
@@ -33,5 +34,11 @@ class NoteList : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        (binding.notelist.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 }
