@@ -2,7 +2,6 @@ package com.barkote.mynotes
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -10,7 +9,6 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.barkote.mynotes.const.EXTRA_NOTE_POSITION
 import com.barkote.mynotes.const.POSITION_NOT_SET
-import com.barkote.mynotes.data.CourseInfo
 import com.barkote.mynotes.data.DataManager
 import com.barkote.mynotes.data.NoteInfo
 import com.barkote.mynotes.databinding.ActivityMainBinding
@@ -27,16 +25,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val adapterCourses =  ArrayAdapter(this,R.layout.drop_down_item,DataManager.courses.values.toList())
-
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        binding.spin.setAdapter(adapterCourses)
-
+        binding.spinner.setAdapter(adapterCourses)
 
         notePosition = intent.getIntExtra(EXTRA_NOTE_POSITION, POSITION_NOT_SET)
 
         if(notePosition != POSITION_NOT_SET){
-            Log.d("TAG", "onCreate:  $notePosition ")
             displayNote()
         }
         else{
@@ -44,9 +38,17 @@ class MainActivity : AppCompatActivity() {
             notePosition = DataManager.notes.lastIndex
         }
 
+        binding.save.setOnClickListener {
+
+            DataManager.notes.add(NoteInfo())
+            notePosition = DataManager.notes.lastIndex
+            val note = DataManager.notes[notePosition]
+
+            note.title = binding.title.text.toString()
+            note.text  = binding.content.text.toString()
 
 
-
+        }
     }
 
     private fun displayNote() {
@@ -57,8 +59,7 @@ class MainActivity : AppCompatActivity() {
         binding.save.visibility = View.GONE
         val item =  DataManager.courses.values.toList().indexOf(note.course)
 
-        binding.spin.setText(note.course.toString())
-        binding.spin.setSelection(item)
+        binding.spinner.setSelection(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -116,3 +117,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 }
+
+
