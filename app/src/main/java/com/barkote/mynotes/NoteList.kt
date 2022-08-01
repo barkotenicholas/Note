@@ -3,7 +3,8 @@ package com.barkote.mynotes
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.barkote.mynotes.const.NOTE_POSITION
 import com.barkote.mynotes.data.DataManager
 import com.barkote.mynotes.databinding.ActivityNoteListBinding
@@ -23,6 +24,7 @@ class NoteList : AppCompatActivity() {
         }
 
 
+        binding.notelist.layoutManager = LinearLayoutManager(this)
 
 
     }
