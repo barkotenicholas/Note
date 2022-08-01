@@ -1,12 +1,11 @@
 package com.barkote.mynotes
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.barkote.mynotes.adapter.NoteRecyclerAdapter
-import com.barkote.mynotes.const.NOTE_POSITION
 import com.barkote.mynotes.data.DataManager
 import com.barkote.mynotes.databinding.ActivityNoteListBinding
 
@@ -31,8 +30,9 @@ class NoteList : AppCompatActivity() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        binding.notelist.adapter.notifyDataSetChanged()
+        binding.notelist.adapter?.notifyDataSetChanged()
     }
 }
