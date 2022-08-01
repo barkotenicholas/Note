@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/PC/StudioProjects/Note/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
+        <entry key="..\:/Users/PC/StudioProjects/Note/app/src/main/res/layout/activity_note_list.xml" value="0.17074275362318841" />
         <entry key="..\:/Users/barkote/AndroidStudioProjects/Notes/app/src/main/res/drawable/ic_add_.xml" value="0.169" />
         <entry key="..\:/Users/barkote/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/barkote/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_note_list.xml" value="0.16666666666666666" />
@@ -11,6 +13,7 @@
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

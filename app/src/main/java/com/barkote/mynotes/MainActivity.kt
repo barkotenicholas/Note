@@ -13,6 +13,7 @@ import com.barkote.mynotes.data.CourseInfo
 import com.barkote.mynotes.data.DataManager
 import com.barkote.mynotes.data.NoteInfo
 import com.barkote.mynotes.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,6 +58,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayNote() {
+
+        if(notePosition  > DataManager.notes.lastIndex){
+            showMessage("Note not found")
+            return
+        }
         val note = DataManager.notes[notePosition]
 
         binding.title.setText(note.title)
@@ -75,11 +81,20 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.action_next -> {
-                moveNext()
+                if(notePosition < DataManager.notes.lastIndex){
+                    moveNext()
+                }else{
+                    val message = "No more Notes"
+                    showMessage(message)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showMessage(message: String) {
+        Snackbar.make(binding.title, message, Snackbar.LENGTH_SHORT).show()
     }
 
     private fun moveNext() {
