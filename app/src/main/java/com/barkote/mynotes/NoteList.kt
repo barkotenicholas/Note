@@ -23,20 +23,12 @@ class NoteList : AppCompatActivity() {
         }
 
 
-        binding.notelist.adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,DataManager.notes)
 
-        binding.notelist.setOnItemClickListener { _, _, i, _ ->
-            val intent   = Intent(this,MainActivity::class.java)
-            intent.putExtra(NOTE_POSITION,i)
-
-            startActivity(intent)
-        }
 
     }
 
 
     override fun onResume() {
         super.onResume()
-        (binding.notelist.adapter as ArrayAdapter<*>).notifyDataSetChanged()
     }
 }
