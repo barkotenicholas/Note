@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         binding.spinner.setSelection(item)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main,menu)
         return true
     }
@@ -106,10 +106,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
 
         if(notePosition >= DataManager.notes.lastIndex){
-            val menuItem = menu?.findItem(R.id.action_next)
+            val menuItem = menu.findItem(R.id.action_next)
             if(menuItem != null){
                 menuItem.icon =getDrawable(R.drawable.ic_block)
                 menuItem.isEnabled = false
