@@ -23,6 +23,7 @@ class NoteRecyclerAdapter(private val context: Context,private val notes: List<N
             with(notes[position]){
                 binding.textCourse.text = this.course?.title
                 binding.textTitle.text = this.title
+                binding.noteColor.setBackgroundColor(this.color)
             }
             holder.notePosition = position
         }
