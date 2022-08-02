@@ -1,12 +1,14 @@
 package com.barkote.mynotes
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.barkote.mynotes.compound.ColorSelector
 import com.barkote.mynotes.const.NOTE_POSITION
 import com.barkote.mynotes.const.POSITION_NOT_SET
 import com.barkote.mynotes.data.CourseInfo
@@ -20,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private var notePosition = POSITION_NOT_SET
-
+    private var noteColor : Int = Color.TRANSPARENT
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,9 +47,15 @@ class MainActivity : AppCompatActivity() {
             note.title = binding.title.text.toString()
             note.text  = binding.content.text.toString()
             note.course= binding.spinner.selectedItem as CourseInfo
-
+            note.color = this.noteColor
 
             finish()
+
+        }
+
+
+        binding.colorSelec.addListener {
+            noteColor = it
 
         }
     }
@@ -68,6 +76,8 @@ class MainActivity : AppCompatActivity() {
         binding.title.setText(note.title)
         binding.content.setText(note.text)
         binding.save.visibility = View.GONE
+        binding.colorSelec.selectedColorValue = note.color
+        noteColor = note.color
         val item =  DataManager.courses.values.toList().indexOf(note.course)
 
         binding.spinner.setSelection(item)
@@ -133,7 +143,7 @@ class MainActivity : AppCompatActivity() {
         note.title = binding.title.text.toString()
         note.text  = binding.content.text.toString()
         note.course= binding.spinner.selectedItem as CourseInfo
-
+        note.color = noteColor
 
     }
 }
