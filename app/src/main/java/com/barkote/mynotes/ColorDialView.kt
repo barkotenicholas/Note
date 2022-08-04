@@ -1,156 +1,112 @@
 package com.barkote.mynotes
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 
-/**
- * TODO: document your custom view class.
- */
-class ColorDialView : View {
+class ColorDialView @JvmOverloads constructor(context: Context,
+                                              attrs: AttributeSet?= null,
+                                              defStyleAttr  :Int =0,
+                                              defStyleRes: Int) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private var _exampleString: String? = null // TODO: use a default from R.string...
-    private var _exampleColor: Int = Color.RED // TODO: use a default from R.color...
-    private var _exampleDimension: Float = 0f // TODO: use a default from R.dimen...
+    private var colors:ArrayList<Int> = arrayListOf(Color.RED,Color.YELLOW,Color.BLUE,Color.GREEN,Color.DKGRAY,Color.CYAN,Color.MAGENTA,Color.BLACK)
 
-    private lateinit var textPaint: TextPaint
-    private var textWidth: Float = 0f
-    private var textHeight: Float = 0f
+    var dialDrawable : Drawable? = null
+    var noColorDrawable : Drawable? = null
+    private var dialDiameter  = toDp(100)
+    private var extraPadding  = toDp(30)
+    private var tickSize = toDp(10).toFloat()
+    private var angleBetweenColors = 0f
 
-    /**
-     * The text to draw
-     */
-    var exampleString: String?
-        get() = _exampleString
-        set(value) {
-            _exampleString = value
-            invalidateTextPaintAndMeasurements()
-        }
+    private var totalLeftPadding = 0f
+    private var totalTopPadding = 0f
+    private var totalRightPadding = 0f
+    private var totalBottomPadding = 0f
 
-    /**
-     * The font color
-     */
-    var exampleColor: Int
-        get() = _exampleColor
-        set(value) {
-            _exampleColor = value
-            invalidateTextPaintAndMeasurements()
-        }
+    private var tickPositionVertical = 0f
 
-    /**
-     * In the example view, this dimension is the font size.
-     */
-    var exampleDimension: Float
-        get() = _exampleDimension
-        set(value) {
-            _exampleDimension = value
-            invalidateTextPaintAndMeasurements()
-        }
+    private var horizontalSize = 0f
+    private var verticalSize = 0f
 
-    /**
-     * In the example view, this drawable is drawn above the text.
-     */
-    var exampleDrawable: Drawable? = null
+    private var centerHorizontal = 0f
+    private var centerVertical = 0f
 
-    constructor(context: Context) : super(context) {
-        init(null, 0)
+    private var paint = Paint().also {
+        it.color = Color.BLUE
+        it.isAntiAlias = true
     }
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
+    init {
+
+        dialDrawable = context.getDrawable(R.drawable.ic_dail).also {
+            it?.bounds = getCenteredBounds(dialDiameter)
+            it?.setTint(Color.DKGRAY)
+        }
+        noColorDrawable = context.getDrawable(R.drawable.ic_baseline_clear_24).also {
+            it?.bounds = getCenteredBounds(tickSize.toInt(),2f)
+        }
+        colors.add(0,Color.TRANSPARENT)
+        angleBetweenColors = 360f / colors.size
+        refreshValues()
+
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
-        context,
-        attrs,
-        defStyle
-    ) {
-        init(attrs, defStyle)
-    }
+    private fun getCenteredBounds(dialDiameter: Int,scalar :Float = 1f): Rect {
 
-    private fun init(attrs: AttributeSet?, defStyle: Int) {
-        // Load attributes
-        val a = context.obtainStyledAttributes(
-            attrs, R.styleable.ColorDialView, defStyle, 0
-        )
+        val half = ((if(dialDiameter>0)dialDiameter/2 else 1) *scalar).toInt()
+        return Rect(-half,-half,half,half)
 
-        _exampleString = a.getString(
-            R.styleable.ColorDialView_exampleString
-        )
-        _exampleColor = a.getColor(
-            R.styleable.ColorDialView_exampleColor,
-            exampleColor
-        )
-        // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-        // values that should fall on pixel boundaries.
-        _exampleDimension = a.getDimension(
-            R.styleable.ColorDialView_exampleDimension,
-            exampleDimension
-        )
-
-        if (a.hasValue(R.styleable.ColorDialView_exampleDrawable)) {
-            exampleDrawable = a.getDrawable(
-                R.styleable.ColorDialView_exampleDrawable
-            )
-            exampleDrawable?.callback = this
-        }
-
-        a.recycle()
-
-        // Set up a default TextPaint object
-        textPaint = TextPaint().apply {
-            flags = Paint.ANTI_ALIAS_FLAG
-            textAlign = Paint.Align.LEFT
-        }
-
-        // Update TextPaint and text measurements from attributes
-        invalidateTextPaintAndMeasurements()
-    }
-
-    private fun invalidateTextPaintAndMeasurements() {
-        textPaint.let {
-            it.textSize = exampleDimension
-            it.color = exampleColor
-            textWidth = it.measureText(exampleString)
-            textHeight = it.fontMetrics.bottom
-        }
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
 
-        // TODO: consider storing these as member variables to reduce
-        // allocations per draw cycle.
-        val paddingLeft = paddingLeft
-        val paddingTop = paddingTop
-        val paddingRight = paddingRight
-        val paddingBottom = paddingBottom
+        val saveCount = canvas.save()
 
-        val contentWidth = width - paddingLeft - paddingRight
-        val contentHeight = height - paddingTop - paddingBottom
+        colors.forEachIndexed { index, i ->
 
-        exampleString?.let {
-            // Draw the text.
-            canvas.drawText(
-                it,
-                paddingLeft + (contentWidth - textWidth) / 2,
-                paddingTop + (contentHeight + textHeight) / 2,
-                textPaint
-            )
+            if(index == 0) {
+                canvas.translate(centerHorizontal,tickPositionVertical)
+                noColorDrawable?.draw(canvas)
+                canvas.translate(-centerHorizontal,-tickPositionVertical)
+            }else{
+                paint.color = colors[index]
+                canvas.drawCircle(centerHorizontal,tickPositionVertical ,tickSize,paint)
+            }
+
+            canvas.rotate(angleBetweenColors,centerHorizontal,centerVertical)
         }
+        canvas.restoreToCount(saveCount)
+        canvas.translate(centerHorizontal,centerVertical)
+        dialDrawable?.draw(canvas)
+    }
 
-        // Draw the example drawable on top of the text.
-        exampleDrawable?.let {
-            it.setBounds(
-                paddingLeft, paddingTop,
-                paddingLeft + contentWidth, paddingTop + contentHeight
-            )
-            it.draw(canvas)
-        }
+    private fun refreshValues(){
+
+        this.totalLeftPadding = (paddingLeft+extraPadding).toFloat()
+        this.totalRightPadding = (paddingRight+extraPadding).toFloat()
+        this.totalBottomPadding = (paddingBottom+extraPadding).toFloat()
+        this.totalTopPadding = (paddingTop+extraPadding).toFloat()
+
+        this.tickPositionVertical = paddingTop + extraPadding / 2f
+        this.centerHorizontal = totalLeftPadding +( horizontalSize -  totalLeftPadding - totalRightPadding )/ 2f
+        this.centerVertical = totalTopPadding +(verticalSize - totalTopPadding - totalBottomPadding/ 2f)
+
+        this.horizontalSize = paddingLeft + paddingRight + (extraPadding * 2) + dialDiameter.toFloat()
+        this.verticalSize = paddingTop+ paddingBottom + (extraPadding *2) +dialDiameter.toFloat()
+
+        this.centerVertical = verticalSize /2f
+        this.centerHorizontal = horizontalSize /2f
+    }
+
+    private fun toDp(value :Int ):Int{
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value.toFloat(),context.resources.displayMetrics).toInt()
     }
 }
