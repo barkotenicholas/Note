@@ -23,9 +23,9 @@ class ColorSelector @JvmOverloads constructor(
         orientation = HORIZONTAL
         binding = ColorSelectorBinding.inflate(LayoutInflater.from(context),this)
 
-        val typedArray = context.obtainStyledAttributes(attributes, R.styleable.ColorSelector)
+        val typedArray = context.obtainStyledAttributes(attributes, R.styleable.ColorSlider)
 
-        listOfColors = typedArray.getTextArray(R.styleable.ColorSelector_colors).map {
+        listOfColors = typedArray.getTextArray(R.styleable.ColorSlider_colors).map {
             Color.parseColor(it.toString())
         }
 

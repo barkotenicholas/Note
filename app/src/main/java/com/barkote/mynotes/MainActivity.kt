@@ -38,6 +38,9 @@ class MainActivity : AppCompatActivity() {
             displayNote()
         }
 
+        binding.colorSelec.addListener {
+            noteColor = it
+        }
         binding.save.setOnClickListener {
 
             DataManager.notes.add(NoteInfo())
@@ -54,10 +57,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        binding.colorSelec.addListener {
-            noteColor = it
 
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         binding.title.setText(note.title)
         binding.content.setText(note.text)
         binding.save.visibility = View.GONE
-        binding.colorSelec.selectedColorValue = note.color
+        binding.colorSelec.selecetedColor = note.color
         noteColor = note.color
         val item =  DataManager.courses.values.toList().indexOf(note.course)
 
