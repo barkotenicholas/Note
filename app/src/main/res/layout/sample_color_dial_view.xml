@@ -5,10 +5,12 @@
     android:layout_height="match_parent">
 
     <com.barkote.mynotes.ColorDialView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:paddingStart="20dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:paddingStart="40dp"
+        android:paddingTop="20dp"
         android:paddingBottom="40dp"
-        />
+        app:scaleToFit="true"
+    />
 
 </FrameLayout>
